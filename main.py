@@ -1,16 +1,14 @@
 from src.data.fetcher import get_prices
 from src.indicators.indicators import moving_average_trend, rsi
-from src.strategy.simple_strategy import check_buy_signal
+from src.strategy.mia_rsi_strategy import ma_rsi
+import config
 
-tickers = ['GOOGL', 'META', 'NFLX']
-dat = get_prices(tickers, '1mo')
+dat = get_prices(config.TICKERS, period='5d', interval='1h')
 
-for ticker in tickers:
-    trend = moving_average_trend(dat.loc[:, ('Close', ticker)], 5)
-    rsi_trend = rsi(dat.loc[:, ('Close', ticker)], 14)
+for ticker in config.TICKERS:
+    trend = moving_average_trend(dat.loc[:, ('Close', ticker)], config.MA_WINDOW)
+    rsi_trend = rsi(dat.loc[:, ('Close', ticker)], config.RSI_WINDOW)
 
-    signal = check_buy_signal(trend, rsi_trend)
-    if signal:
-        print(f"{ticker} СИГНАЛ НА КУПІВЛЮ")
-    else:
-        print(f"{ticker} немає сигналу")
+    signal = ma_rsi(trend, rsi_trend, config.RSI_THRESHOLD, mode=config.STRATEGY_MODE)
+
+    print(signal)

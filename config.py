@@ -1,0 +1,6 @@
+# config.py
+TICKERS = ['GOOGL', 'META', 'NFLX']
+MA_WINDOW = 5
+RSI_WINDOW = 14
+RSI_THRESHOLD = 30
+STRATEGY_MODE = 'reversal'
